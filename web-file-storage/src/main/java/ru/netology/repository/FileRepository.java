@@ -29,21 +29,12 @@ public class FileRepository {
         base_dir.toFile().deleteOnExit();
     }
 
-    public void saveFile(String file_name, MultipartFile file) {
-        try {
-            Files.write(base_dir.resolve(file_name), file.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void saveFile(String file_name, MultipartFile file) throws IOException {
+        Files.write(base_dir.resolve(file_name), file.getBytes());
     }
 
-    public Optional<byte[]> getFile(String file_name) {
-        byte[] file = null;
-        try {
-            file = readAllBytes(base_dir.resolve(file_name));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return Optional.ofNullable(file);
+    public Optional<byte[]> getFile(String file_name) throws IOException {
+        byte[] file = readAllBytes(base_dir.resolve(file_name));
+        return Optional.of(file);
     }
 }

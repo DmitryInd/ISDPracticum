@@ -9,8 +9,8 @@ import javax.servlet.ServletContext;
 
 
 public class ApplicationInitializer implements WebApplicationInitializer {
-    final private String TMP_FOLDER = "/";
-    final private int MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
+    private static final String TMP_FOLDER = "/";
+    private static final int MAX_UPLOAD_SIZE = 5 * 1024 * 1024;
 
     @Override
     public void onStartup(ServletContext servletContext) {
