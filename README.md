@@ -6,4 +6,4 @@
 2) docker-compose up
 
 ### Сервер для загрузки файлов:
-Доступ по адресу: http://localhost:8081
+Доступен по адресу: http://localhost:8081
