@@ -18,8 +18,7 @@ CREATE TABLE IF NOT EXISTS userbase.user_roles (
     role varchar(45) NOT NULL,
     PRIMARY KEY (user_role_id),
     UNIQUE KEY uni_username_role (role,username),
-    KEY fk_username_idx (username),
-    CONSTRAINT fk_username FOREIGN KEY (username) REFERENCES users (username));
+    FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE);
 
 REPLACE INTO userbase.users(username,password,enabled)
 VALUES ('user','{noop}userPass', true);

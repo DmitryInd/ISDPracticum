@@ -20,8 +20,6 @@ services:
     build: web-file-storage/
     ports:
         - "8081:8081"
-    links:
-        - "mysql-server"
     stdin_open: true # docker run -i
     tty: true # docker run -t
     depends_on:
