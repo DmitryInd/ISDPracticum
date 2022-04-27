@@ -2,6 +2,7 @@ package ru.netology.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,6 +14,15 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+    @Bean(name = "dataSource")
+    public DriverManagerDataSource dataSource() {
+        DriverManagerDataSource driverManagerDataSource = new DriverManagerDataSource();
+        driverManagerDataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        driverManagerDataSource.setUrl("jdbc:mysql://mysql-server:3306/userbase");
+        driverManagerDataSource.setUsername("web");
+        driverManagerDataSource.setPassword("root");
+        return driverManagerDataSource;
+    }
     @Bean
     public PasswordEncoder passwordEncoder() {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
@@ -20,13 +30,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-//        auth.jdbcAuthentication().usersByUsernameQuery("").authoritiesByUsernameQuery("");
-        auth.inMemoryAuthentication()
-                .withUser("user1").password(passwordEncoder().encode("user1Pass")).roles("USER")
-                .and()
-                .withUser("user2").password(passwordEncoder().encode("user2Pass")).roles("USER")
-                .and()
-                .withUser("admin").password(passwordEncoder().encode("adminPass")).roles("ADMIN");
+        auth.jdbcAuthentication().dataSource(dataSource()).passwordEncoder(passwordEncoder())
+                .usersByUsernameQuery(
+                        "SELECT username, password, enabled FROM users WHERE username=?")
+                .authoritiesByUsernameQuery(
+                        "SELECT username, role FROM user_roles WHERE username=?");
     }
 
     @Override
