@@ -33,7 +33,7 @@ public class LoginController {
         }
     }
 
-    @GetMapping("/accessDenied")
+    @RequestMapping(value = "/accessDenied", method = { RequestMethod.GET, RequestMethod.POST })
     public ResponseEntity<String> accessDeniedPage() {
         return ResponseEntity.status(403).body("[403] Forbidden");
     }
