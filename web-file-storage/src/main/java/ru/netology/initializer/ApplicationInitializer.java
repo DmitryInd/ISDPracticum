@@ -3,6 +3,7 @@ package ru.netology.initializer;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.ContextLoaderListener;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.filter.CompositeFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -32,11 +33,15 @@ public class ApplicationInitializer implements WebApplicationInitializer {
         servletRegistration.setLoadOnStartup(1);
         servletRegistration.addMapping("/*");
 
-        final var securityFilter = new DelegatingFilterProxy("springSecurityFilterChain");
-        final var filterRegistration = servletContext.addFilter(
-                "securityFilter",
-                securityFilter
+        final var anonymousFilterRegistration = servletContext.addFilter(
+                "anonymousFilter",
+                new DelegatingFilterProxy("AnonymousFilter")
         );
-        filterRegistration.addMappingForServletNames(null, false, "app");
+        anonymousFilterRegistration.addMappingForUrlPatterns(null, true, "/*");
+        final var authorizeFilterRegistration = servletContext.addFilter(
+                "authorizeFilter",
+                new DelegatingFilterProxy("AuthorizeFilter")
+        );
+        authorizeFilterRegistration.addMappingForUrlPatterns(null, true, "/*");
     }
 }

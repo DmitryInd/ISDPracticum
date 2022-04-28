@@ -1,34 +1,33 @@
 package ru.netology.controller;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import ru.netology.filter.AuthenticationToken;
 
 import java.util.Objects;
 
 @Controller
+@SessionAttributes("authenticationToken")
 public class LoginController {
     @GetMapping("/")
-    public String loginPage() {
-        final var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (!(authentication instanceof AnonymousAuthenticationToken)) {
+    public String loginPage(@ModelAttribute("authenticationToken") AuthenticationToken token) {
+        if (!token.isAnonymous()) {
             return "/home";
         } else {
             return "/resources/login.html";
         }
     }
-
     @RequestMapping(value = "/home", method = { RequestMethod.GET, RequestMethod.POST })
-    public ResponseEntity<String> homePage(@RequestParam(defaultValue = "false", required = false) String error) {
+    public ResponseEntity<String> homePage(
+            @ModelAttribute("authenticationToken") AuthenticationToken token,
+            @RequestParam(defaultValue = "false", required = false) String error) {
         if (Objects.equals(error, "true")) {
             return ResponseEntity.status(403).body("Invalid username or password.");
         } else {
-            final var authentication = SecurityContextHolder.getContext().getAuthentication();
             return ResponseEntity.ok().body(
                     String.format("Hi, %s! There you can upload and download files.",
-                            authentication.getName())
+                            token.getName())
             );
         }
     }

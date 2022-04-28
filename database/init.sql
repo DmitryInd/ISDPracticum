@@ -21,9 +21,9 @@ CREATE TABLE IF NOT EXISTS userbase.user_roles (
     FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE);
 
 REPLACE INTO userbase.users(username,password,enabled)
-VALUES ('user','{noop}userPass', true);
+VALUES ('user','userPass', true);
 REPLACE INTO userbase.users(username,password,enabled)
-VALUES ('dmitry','{noop}dmitryPass', true);
+VALUES ('dmitry','dmitryPass', true);
 
 REPLACE INTO userbase.user_roles (username, role)
 VALUES ('dmitry', 'ROLE_USER');
