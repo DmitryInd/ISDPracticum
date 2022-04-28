@@ -30,8 +30,8 @@ public class AnonymousFilter extends GenericFilterBean {
                 !availableURI.contains(((HttpServletRequest) request).getRequestURI())) {
             request.getRequestDispatcher("/accessDenied")
                     .forward(request, response);
+        } else {
+            chain.doFilter(request, response);
         }
-
-        chain.doFilter(request, response);
     }
 }
