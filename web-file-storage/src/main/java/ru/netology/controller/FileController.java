@@ -8,7 +8,6 @@ import ru.netology.service.FileService;
 import java.io.IOException;
 
 @RestController
-@RequestMapping()
 public class FileController {
     private final FileService service;
 

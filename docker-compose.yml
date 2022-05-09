@@ -1,0 +1,26 @@
+version: "3.8"
+
+
+services:
+  mysql-server:
+    image: mysql:latest
+    expose:
+        - "3306"
+    ports:
+        - "3306:3306"
+    command: --init-file /database/init.sql
+    volumes:
+        - ./database/init.sql:/database/init.sql
+    environment:
+        MYSQL_ROOT_USER: root
+        MYSQL_ROOT_PASSWORD: root
+      
+  file-storage-server:
+    container_name: web-file-storage
+    build: web-file-storage/
+    ports:
+        - "8081:8081"
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
+    depends_on:
+      - mysql-server
