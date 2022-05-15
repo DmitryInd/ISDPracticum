@@ -15,7 +15,7 @@ public class LoginController {
         if (!token.isAnonymous()) {
             return "/home";
         } else {
-            return "/resources/login.html";
+            return "login";
         }
     }
     @RequestMapping(value = "/home", method = { RequestMethod.GET, RequestMethod.POST })

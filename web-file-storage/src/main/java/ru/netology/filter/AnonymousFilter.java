@@ -1,5 +1,6 @@
 package ru.netology.filter;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Component("AnonymousFilter")
+@Order(1)
 public class AnonymousFilter extends GenericFilterBean {
     private static final List<String> availableURI = List.of("/", "/authorize");
 
