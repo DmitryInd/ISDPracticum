@@ -16,7 +16,7 @@ import java.util.Objects;
 @Component("AnonymousFilter")
 @Order(1)
 public class AnonymousFilter extends GenericFilterBean {
-    private static final List<String> availableURI = List.of("/", "/authorize");
+    private static final List<String> availableURI = List.of("/", "/authorize", "/actuator/prometheus*");
 
     @Override
     public void doFilter(ServletRequest request,
@@ -28,8 +28,9 @@ public class AnonymousFilter extends GenericFilterBean {
             token = AuthenticationToken.getAnonymousToken();
             session.setAttribute("authenticationToken", token);
         }
+        String requestURI = ((HttpServletRequest) request).getRequestURI();
         if (token.isAnonymous() &&
-                !availableURI.contains(((HttpServletRequest) request).getRequestURI())) {
+                availableURI.stream().noneMatch(requestURI::matches)) {
             request.getRequestDispatcher("/accessDenied")
                     .forward(request, response);
         }
