@@ -1,6 +1,5 @@
 package ru.netology.repository;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
