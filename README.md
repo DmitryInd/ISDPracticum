@@ -11,8 +11,8 @@
 ### Тестовый пользователь:  
 Логин: user  
 Пароль: userPass  
-
+  
 ### Grafana:
-Доступна по адресу: http://localhost:3000
+Доступна по адресу: http://localhost:3000  
 Логин: admin  
-Пароль: admin 
+Пароль: admin  
