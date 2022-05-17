@@ -16,7 +16,7 @@ import java.util.Objects;
 @Component("AnonymousFilter")
 @Order(1)
 public class AnonymousFilter extends GenericFilterBean {
-    private static final List<String> availableURI = List.of("/", "/authorize", "/actuator/prometheus*");
+    private static final List<String> availableURI = List.of("/", "/authorize", "/actuator/prometheus");
 
     @Override
     public void doFilter(ServletRequest request,

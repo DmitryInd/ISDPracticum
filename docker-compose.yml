@@ -2,26 +2,6 @@ version: "3.8"
 
 
 services:
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - 9090:9090
-    volumes:
-      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
-      - ./prometheus:/prometheus
-      
-  grafana:
-    build: './configs/grafana'
-    ports:
-      - 3000:3000
-    volumes:
-      - ./grafana:/var/lib/grafana
-    environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    depends_on:
-      - prometheus
-      
   mysql-server:
     image: mysql:latest
     expose:
@@ -40,7 +20,29 @@ services:
     build: web-file-storage/
     ports:
         - "8081:8081"
-    stdin_open: true # docker run -i
-    tty: true # docker run -t
     depends_on:
       - mysql-server
+      
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+    volumes:
+      - ./configs/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus:/prometheus
+    depends_on:
+      - file-storage-server
+      
+  grafana:
+    build: './configs/grafana'
+    ports:
+      - 3000:3000
+    volumes:
+      - ./grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus
+    stdin_open: true # docker run -i
+    tty: true # docker run -t
