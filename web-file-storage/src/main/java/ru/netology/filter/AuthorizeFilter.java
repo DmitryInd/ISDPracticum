@@ -46,9 +46,9 @@ public class AuthorizeFilter extends GenericFilterBean {
             }
             request.getRequestDispatcher(redirectPath)
                     .forward(request, response);
+        } else {
+            chain.doFilter(request, response);
         }
-
-        chain.doFilter(request, response);
     }
 
     private String authorization(HttpSession session, String user, String password) {

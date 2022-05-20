@@ -34,8 +34,8 @@ public class AnonymousFilter extends GenericFilterBean {
                 availableURI.stream().noneMatch(requestURI::matches)) {
             request.getRequestDispatcher("/accessDenied")
                     .forward(request, response);
+        } else {
+            chain.doFilter(request, response);
         }
-
-        chain.doFilter(request, response);
     }
 }
