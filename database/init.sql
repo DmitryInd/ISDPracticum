@@ -6,6 +6,11 @@ FLUSH PRIVILEGES;
 
 CREATE DATABASE IF NOT EXISTS userbase;
 
+CREATE TABLE IF NOT EXISTS userbase.files (
+    filename VARCHAR(45) NOT NULL ,
+    file_content LONGBLOB NOT NULL ,
+    PRIMARY KEY (filename));
+
 CREATE TABLE IF NOT EXISTS userbase.users (
     username VARCHAR(45) NOT NULL ,
     password VARCHAR(45) NOT NULL ,
@@ -13,9 +18,9 @@ CREATE TABLE IF NOT EXISTS userbase.users (
     PRIMARY KEY (username));
 
 CREATE TABLE IF NOT EXISTS userbase.user_roles (
-    user_role_id int(11) NOT NULL AUTO_INCREMENT,
-    username varchar(45) NOT NULL,
-    role varchar(45) NOT NULL,
+    user_role_id INT(11) NOT NULL AUTO_INCREMENT,
+    username VARCHAR(45) NOT NULL,
+    role VARCHAR(45) NOT NULL,
     PRIMARY KEY (user_role_id),
     UNIQUE KEY uni_username_role (role,username),
     FOREIGN KEY (username) REFERENCES users (username) ON DELETE CASCADE ON UPDATE CASCADE);

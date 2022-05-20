@@ -1,9 +1,11 @@
 package ru.netology.filter;
 
 import org.springframework.core.annotation.Order;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import ru.netology.entity.user.AuthenticationToken;
+import ru.netology.repository.UserAuthorizationInfoRepository;
+import ru.netology.repository.UserRoleRepository;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -17,12 +19,12 @@ import java.util.Objects;
 @Component("AuthorizeFilter")
 @Order(2)
 public class AuthorizeFilter extends GenericFilterBean {
-    private final JdbcTemplate jdbcTemplate;
-    private final String getUserPasswordSql = "SELECT password, enabled FROM users WHERE username='%s'";
-    private final String getUserRoleSql = "SELECT role FROM user_roles WHERE username='%s'";
+    private final UserAuthorizationInfoRepository authorizationInfoRepository;
+    private final UserRoleRepository roleRepository;
 
-    public AuthorizeFilter(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public AuthorizeFilter(UserAuthorizationInfoRepository authorizationInfoRepository, UserRoleRepository roleRepository) {
+        this.authorizationInfoRepository = authorizationInfoRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -51,17 +53,17 @@ public class AuthorizeFilter extends GenericFilterBean {
 
     private String authorization(HttpSession session, String user, String password) {
         AuthenticationToken token = (AuthenticationToken) session.getAttribute("authenticationToken");
-        var userData = jdbcTemplate.queryForRowSet(
-                String.format(getUserPasswordSql, user)
-        );
-        if (userData.first() &&
-                userData.getBoolean("enabled") &&
-                Objects.equals(userData.getString("password"), password)) {
-            var userRole = jdbcTemplate.queryForObject(
-                    String.format(getUserRoleSql, user),
-                    String.class);
+        var AuthorizationInfo = authorizationInfoRepository.findById(user);
+        if (AuthorizationInfo.isPresent() &&
+                AuthorizationInfo.get().getEnabled() &&
+                Objects.equals(AuthorizationInfo.get().getPassword(), password)) {
+            var userRole = roleRepository.findFirstByAuthorizationInfo(AuthorizationInfo.get());
             session.setAttribute("authenticationToken",
-                    new AuthenticationToken(user, userRole));
+                    new AuthenticationToken(
+                            AuthorizationInfo.get().getUsername(),
+                            userRole.get().getRole()
+                    )
+            );
             return "/home";
         } else {
             return "/home?error=true";

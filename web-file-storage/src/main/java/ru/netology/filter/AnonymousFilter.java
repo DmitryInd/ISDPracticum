@@ -3,6 +3,7 @@ package ru.netology.filter;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
+import ru.netology.entity.user.AuthenticationToken;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
