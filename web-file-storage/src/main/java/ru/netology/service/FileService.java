@@ -2,7 +2,6 @@ package ru.netology.service;
 
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import ru.netology.entity.File;
 import ru.netology.exception.FileNotFoundSilentException;
