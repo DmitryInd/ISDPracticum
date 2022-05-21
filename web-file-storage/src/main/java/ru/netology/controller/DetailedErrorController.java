@@ -15,11 +15,11 @@ public class DetailedErrorController implements ErrorController {
     @RequestMapping(value = PATH)
     public ResponseEntity<String> handleError(HttpServletRequest request) {
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
-        Object error = request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
+        Throwable error = (Throwable) request.getAttribute(RequestDispatcher.ERROR_EXCEPTION);
         String errorMessage = request.getAttribute(RequestDispatcher.ERROR_MESSAGE).toString();
 
         if (error != null) {
-            errorMessage = errorMessage + "\nDetailed:\n" + error;
+            errorMessage = errorMessage + " \nDetailed:\n" + error;
         }
 
         if (status != null) {
