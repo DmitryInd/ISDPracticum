@@ -3,7 +3,7 @@ package ru.netology.controller;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import ru.netology.filter.AuthenticationToken;
+import ru.netology.entity.user.AuthenticationToken;
 
 import java.util.Objects;
 

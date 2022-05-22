@@ -1,4 +1,4 @@
-package ru.netology.filter;
+package ru.netology.entity.user;
 
 import java.util.Objects;
 

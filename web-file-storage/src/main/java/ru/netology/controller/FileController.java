@@ -19,7 +19,20 @@ public class FileController {
     }
 
     @GetMapping("/getFile")
-    public ResponseEntity<byte[]> getFile(@RequestParam String filename) throws IOException {
+    public ResponseEntity<byte[]> getFile(@RequestParam String filename) {
         return ResponseEntity.ok().body(service.getFile(filename));
+    }
+
+    @DeleteMapping("/file")
+    public ResponseEntity<String> deleteFile(@RequestParam String filename) {
+        service.deleteFile(filename);
+        return ResponseEntity.ok().body("Successfully deleted");
+    }
+
+    @PutMapping("/file")
+    public ResponseEntity<String> updateFilename(@RequestParam String originalFilename,
+                                                 @RequestParam String newFilename) {
+        service.updateFilename(originalFilename, newFilename);
+        return ResponseEntity.ok().body("Successfully updated");
     }
 }
