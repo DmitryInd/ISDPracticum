@@ -13,9 +13,9 @@ public class LoginController {
     @GetMapping("/")
     public String loginPage(@ModelAttribute("authenticationToken") AuthenticationToken token) {
         if (!token.isAnonymous()) {
-            return "/home";
+            return "forward:/home";
         } else {
-            return "/resources/login.html";
+            return "login";
         }
     }
     @RequestMapping(value = "/home", method = { RequestMethod.GET, RequestMethod.POST })

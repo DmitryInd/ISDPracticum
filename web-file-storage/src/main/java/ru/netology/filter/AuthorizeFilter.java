@@ -1,5 +1,6 @@
 package ru.netology.filter;
 
+import org.springframework.core.annotation.Order;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 @Component("AuthorizeFilter")
+@Order(2)
 public class AuthorizeFilter extends GenericFilterBean {
     private final JdbcTemplate jdbcTemplate;
     private final String getUserPasswordSql = "SELECT password, enabled FROM users WHERE username='%s'";
@@ -29,7 +31,6 @@ public class AuthorizeFilter extends GenericFilterBean {
             throws IOException, ServletException {
         final var servletRequest = ((HttpServletRequest) request);
         final var session = servletRequest.getSession();
-
         if (Objects.equals(servletRequest.getRequestURI(), "/authorize")) {
             String redirectPath;
 
@@ -43,9 +44,9 @@ public class AuthorizeFilter extends GenericFilterBean {
             }
             request.getRequestDispatcher(redirectPath)
                     .forward(request, response);
+        } else {
+            chain.doFilter(request, response);
         }
-
-        chain.doFilter(request, response);
     }
 
     private String authorization(HttpSession session, String user, String password) {

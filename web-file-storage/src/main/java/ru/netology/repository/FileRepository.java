@@ -1,5 +1,6 @@
 package ru.netology.repository;
 
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -8,6 +9,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 
@@ -15,9 +17,15 @@ import static java.nio.file.Files.readAllBytes;
 
 @Repository
 public class FileRepository {
-    private static final Path baseDir = Path.of("./storage/");
+    private final Path baseDir;
 
-    public FileRepository() throws IOException {
+    public FileRepository(Environment env) throws IOException {
+        this.baseDir = Path.of(
+                Objects.requireNonNull(
+                        env.getProperty("web-file-storage.repository.storage_directory")
+                )
+        );
+
         if (baseDir.toFile().exists()) {
             try (Stream<Path> walk = Files.walk(baseDir)) {
                 walk.sorted(Comparator.reverseOrder())
